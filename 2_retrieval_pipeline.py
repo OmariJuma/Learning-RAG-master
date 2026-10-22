@@ -1,5 +1,11 @@
 from langchain_chroma import Chroma
 from langchain_ollama import OllamaEmbeddings
+from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_core.messages import HumanMessage, SystemMessage
+import getpass
+import os
+import truststore
+truststore.inject_into_ssl()
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -25,6 +31,30 @@ print("--- Context ---")
 
 for i, doc in enumerate(relevant_docs,1):
     print(f"Document {i}: \n {doc.page_content} \n")
+
+
+combined_input = f"""Based on the following documents, please answer this question: {query}
+Documents:
+{chr(10).join([f"- {doc.page_content}" for doc in relevant_docs])}
+please provide clear, helpful answer using only infomation from these documents. If you can't find the answer just say you have not found the answer
+ """
+if "GOOGLE_API_KEY" not in os.environ:
+    os.environ["GOOGLE_API_KEY"] = getpass.getpass("Enter your Google AI API key: ")
+    
+model = ChatGoogleGenerativeAI(model = "gemini-3.8-flash")
+
+messages = [
+    SystemMessage(content = "You are a helpful assistant."),
+    HumanMessage(content=combined_input),
+]
+
+result = model.invoke(messages)
+
+print("\n ---Generated Response ---")
+
+print(f"Content only \n{result.text}")
+
+
 
 # Questions to ask:
 # 1. What was microsoft first hardware product release?

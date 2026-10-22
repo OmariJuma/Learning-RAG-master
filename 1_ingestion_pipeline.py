@@ -1,4 +1,4 @@
-# pip install langchain langchain-community langchain_text_splitters langchain_openai langchain_chroma python_dotenv
+# pip install langchain langchain-community langchain_text_splitters langchain_openai langchain_google_genai langchain_chroma python_dotenv
 import os
 from langchain_community.document_loaders import TextLoader, DirectoryLoader
 from langchain_text_splitters import CharacterTextSplitter
