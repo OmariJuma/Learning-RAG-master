@@ -42,6 +42,7 @@ def split_documents(documents, chunk_size = 1000, chunk_overlap = 0):
     print("Splitting documents into chunks...")
 
     text_splitter = CharacterTextSplitter(
+        #separator="\n\n",  # Default separator. Other options include ["\n", ". ", " ", ""]
         chunk_size = chunk_size,
         chunk_overlap = chunk_overlap
     )
